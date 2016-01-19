@@ -69,14 +69,28 @@ Background.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 }
 
+// function Unicorn(game) {
+//     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 0, 206, 110, 0.02, 30, true, true);
+//     this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
+//     this.jumping = false;
+//     this.radius = 100;
+//     this.ground = 400;
+//     Entity.call(this, game, 0, 400);
+// }
+
+
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 0, 206, 110, 0.02, 30, true, true);
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 714, 746, 55, 0.02, 13, true, true);
     this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
     this.jumping = false;
     this.radius = 100;
     this.ground = 400;
     Entity.call(this, game, 0, 400);
 }
+
+
+
+
 
 Unicorn.prototype = new Entity();
 Unicorn.prototype.constructor = Unicorn;
@@ -115,7 +129,9 @@ Unicorn.prototype.draw = function (ctx) {
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
+//ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
+
+ASSET_MANAGER.queueDownload("./img/Simba.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
