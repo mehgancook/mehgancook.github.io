@@ -80,15 +80,25 @@ Background.prototype.draw = function (ctx) {
 
 
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 714, 746, 55, 0.02, 13, true, true);
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 55, 50, 0.02, 13, true, true);
+ //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
     this.jumping = false;
     this.radius = 100;
     this.ground = 400;
     Entity.call(this, game, 0, 400);
 }
 
-
+    // this.spriteSheet = spriteSheet;
+    // this.startX = startX;
+    // this.startY = startY;
+    // this.frameWidth = frameWidth;
+    // this.frameDuration = frameDuration;
+    // this.frameHeight = frameHeight;
+    // this.frames = frames;
+    // this.totalTime = frameDuration * frames;
+    // this.elapsedTime = 0;
+    // this.loop = loop;
+    // this.reverse = reverse;
 
 
 
