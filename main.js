@@ -13,7 +13,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDu
 }
 
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 1;
+    var scaleBy = scaleBy || 3;
     this.elapsedTime += tick;
     if (this.loop) {
         if (this.isDone()) {
@@ -80,7 +80,7 @@ Background.prototype.draw = function (ctx) {
 
 
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 55, 50, 0.02, 13, true, true);
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 52, 50, 0.02, 13, true, true);
  //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
     this.jumping = false;
     this.radius = 100;
