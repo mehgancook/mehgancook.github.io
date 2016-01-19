@@ -80,7 +80,7 @@ Background.prototype.draw = function (ctx) {
 
 
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 58, 50, 0.02, 13, true, true);
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 54, 50, 0.02, 13, true, true);
  //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
     this.jumping = false;
     this.radius = 100;
