@@ -142,7 +142,7 @@ var ASSET_MANAGER = new AssetManager();
 
 //ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 
-ASSET_MANAGER.queueDownload("./img/Simba.png");
+ASSET_MANAGER.queueDownload("./img/Dino.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
