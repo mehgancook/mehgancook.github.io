@@ -80,7 +80,8 @@ Background.prototype.draw = function (ctx) {
 
 
 function Unicorn(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 59, 50, 0.02, 13, true, true);
+ //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 59, 50, 0.02, 13, true, true);
+      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/FaerieDragon.png"), 0, 156, 160, 140, 0.02, 13, true, true);
  //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/adultsimba.PNG"), 0, 113, 145, 70, 0.5, 12, true, true);
  //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
     this.jumping = false;
@@ -142,7 +143,8 @@ var ASSET_MANAGER = new AssetManager();
 
 //ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 
-ASSET_MANAGER.queueDownload("./img/Simba.png");
+ASSET_MANAGER.queueDownload("./img/FaerieDragon.png");
+
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
