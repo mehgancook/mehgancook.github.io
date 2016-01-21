@@ -13,7 +13,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDu
 }
 
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 2;
+    var scaleBy = scaleBy || 3;
     this.elapsedTime += tick;
     if (this.loop) {
         if (this.isDone()) {
@@ -64,8 +64,8 @@ Background.prototype.update = function () {
 }
 
 Background.prototype.draw = function (ctx) {
-    ctx.fillStyle = "SaddleBrown";
-    ctx.fillRect(0,500,800,300);
+  //  ctx.fillStyle = "SaddleBrown";
+   // ctx.fillRect(0,500,800,300);
     Entity.prototype.draw.call(this);
 }
 
@@ -81,9 +81,12 @@ Background.prototype.draw = function (ctx) {
 
 function Unicorn(game) {
  //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 59, 50, 0.02, 13, true, true);
-      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/FaerieDragon.png"), 0, 156, 160, 140, 0.30, 12, true, true);
+    // this.animation = new Animation(ASSET_MANAGER.getAsset("./img/FaerieDragon.png"), 0, 156, 160, 140, 0.30, 12, true, true);
+      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 100, 70, 0.20, 3, true, true);
+ //     this.biteAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 0, 100, 70, 0.20, 3, false, true);
  //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/adultsimba.PNG"), 0, 113, 145, 70, 0.5, 12, true, true);
  //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
+    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 30, 100, 70, 0.20, 3, false, true);
     this.jumping = false;
     this.radius = 100;
     this.ground = 350;
@@ -114,22 +117,22 @@ Unicorn.prototype.update = function () {
             this.jumpAnimation.elapsedTime = 0;
             this.jumping = false;
         }
-        var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
-        var totalHeight = 200;
+   //     var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
+  //      var totalHeight = 200;
 
-        if (jumpDistance > 0.5)
-            jumpDistance = 1 - jumpDistance;
+ //       if (jumpDistance > 0.5)
+ //           jumpDistance = 1 - jumpDistance;
 
         //var height = jumpDistance * 2 * totalHeight;
-        var height = totalHeight*(-4 * (jumpDistance * jumpDistance - jumpDistance));
-        this.y = this.ground - height;
+    //    var height = totalHeight*(-4 * (jumpDistance * jumpDistance - jumpDistance));
+  //      this.y = this.ground - height;
     }
     Entity.prototype.update.call(this);
 }
 
 Unicorn.prototype.draw = function (ctx) {
     if (this.jumping) {
-        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x + 17, this.y - 34);
+        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     }
     else {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
@@ -143,7 +146,8 @@ var ASSET_MANAGER = new AssetManager();
 
 //ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 
-ASSET_MANAGER.queueDownload("./img/FaerieDragon.png");
+//ASSET_MANAGER.queueDownload("./img/FaerieDragon.png");
+ASSET_MANAGER.queueDownload("./img/whale.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
