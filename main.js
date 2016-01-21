@@ -69,42 +69,19 @@ Background.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 }
 
-// function Unicorn(game) {
-//     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 0, 0, 206, 110, 0.02, 30, true, true);
-//     this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
-//     this.jumping = false;
-//     this.radius = 100;
-//     this.ground = 400;
-//     Entity.call(this, game, 0, 400);
-// }
+
 
 
 function Unicorn(game) {
- //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/Simba.png"), 0, 710, 59, 50, 0.02, 13, true, true);
-    // this.animation = new Animation(ASSET_MANAGER.getAsset("./img/FaerieDragon.png"), 0, 156, 160, 140, 0.30, 12, true, true);
-      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 100, 70, 0.20, 3, true, true);
- //     this.biteAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 0, 100, 70, 0.20, 3, false, true);
- //   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/adultsimba.PNG"), 0, 113, 145, 70, 0.5, 12, true, true);
- //   this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/RobotUnicorn.png"), 618, 334, 174, 138, 0.02, 40, false, true);
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 30, 100, 70, 0.20, 3, false, true);
+
+      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 100, 70, 0.15, 3, true, true);
+
+    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 31, 100, 70, 0.15, 3, false, true);
     this.jumping = false;
     this.radius = 100;
     this.ground = 350;
-    Entity.call(this, game, 0, 400);
+    Entity.call(this, game, 0, 200);
 }
-
-    // this.spriteSheet = spriteSheet;
-    // this.startX = startX;
-    // this.startY = startY;
-    // this.frameWidth = frameWidth;
-    // this.frameDuration = frameDuration;
-    // this.frameHeight = frameHeight;
-    // this.frames = frames;
-    // this.totalTime = frameDuration * frames;
-    // this.elapsedTime = 0;
-    // this.loop = loop;
-    // this.reverse = reverse;
-
 
 
 Unicorn.prototype = new Entity();
@@ -117,25 +94,29 @@ Unicorn.prototype.update = function () {
             this.jumpAnimation.elapsedTime = 0;
             this.jumping = false;
         }
-   //     var jumpDistance = this.jumpAnimation.elapsedTime / this.jumpAnimation.totalTime;
-  //      var totalHeight = 200;
 
- //       if (jumpDistance > 0.5)
- //           jumpDistance = 1 - jumpDistance;
-
-        //var height = jumpDistance * 2 * totalHeight;
-    //    var height = totalHeight*(-4 * (jumpDistance * jumpDistance - jumpDistance));
-  //      this.y = this.ground - height;
     }
     Entity.prototype.update.call(this);
 }
 
 Unicorn.prototype.draw = function (ctx) {
     if (this.jumping) {
-        this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+        if (this.x < 550) {
+            this.x += 2;
+            this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+        }
+        else {
+            this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+        }
     }
     else {
+        if (this.x < 550) {
+        this.x += 2;
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+    }
+    else {
+       this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y); 
+    }
     }
     Entity.prototype.draw.call(this);
 }
