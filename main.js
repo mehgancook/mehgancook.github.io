@@ -72,51 +72,58 @@ Background.prototype.draw = function (ctx) {
 
 
 
-function Unicorn(game) {
+function Whale(game) {
 
-      this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 100, 70, 0.15, 3, true, true);
-
-    this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 31, 100, 70, 0.15, 3, false, true);
-    this.jumping = false;
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 99, 70, 0.15, 3, true, true);
+    this.biteAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 31, 100, 70, 0.15, 3, false, true);
+    this.backAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 137, 100, 70, 0.15, 3, true, true);
+    this.biting = false;
     this.radius = 100;
     this.ground = 350;
-    Entity.call(this, game, 0, 200);
+    Entity.call(this, game, -50, 200);
+}
+
+function Shark(game) {
+    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/sharks.png"), 0, 150, 86, 45, 0.15, 3, true, true);
+    this.radius = 100;
+    this.ground = 350;
+    Entity.call(this, game, 0, 700);
 }
 
 
-Unicorn.prototype = new Entity();
-Unicorn.prototype.constructor = Unicorn;
+Shark.prototype = new Entity();
+Shark.prototype.constructor = Shark;
 
-Unicorn.prototype.update = function () {
-    if (this.game.space) this.jumping = true;
-    if (this.jumping) {
-        if (this.jumpAnimation.isDone()) {
-            this.jumpAnimation.elapsedTime = 0;
-            this.jumping = false;
+
+Whale.prototype = new Entity();
+Whale.prototype.constructor = Whale;
+
+Whale.prototype.update = function () {
+    if (this.game.space) this.biting = true;
+    if (this.biting) {
+        if (this.biteAnimation.isDone()) {
+            this.biteAnimation.elapsedTime = 0;
+            this.biting = false;
         }
 
     }
     Entity.prototype.update.call(this);
 }
 
-Unicorn.prototype.draw = function (ctx) {
-    if (this.jumping) {
-        if (this.x < 550) {
+Shark.prototype.draw = function (ctx) {
+    this.x += 5;
+    this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+
+}
+
+Whale.prototype.draw = function (ctx) {
+    if (this.biting) {
             this.x += 2;
-            this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-        }
-        else {
-            this.jumpAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-        }
+            this.biteAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     }
     else {
-        if (this.x < 550) {
         this.x += 2;
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-    }
-    else {
-       this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y); 
-    }
     }
     Entity.prototype.draw.call(this);
 }
@@ -125,10 +132,9 @@ Unicorn.prototype.draw = function (ctx) {
 
 var ASSET_MANAGER = new AssetManager();
 
-//ASSET_MANAGER.queueDownload("./img/RobotUnicorn.png");
 
-//ASSET_MANAGER.queueDownload("./img/FaerieDragon.png");
 ASSET_MANAGER.queueDownload("./img/whale.png");
+ASSET_MANAGER.queueDownload("./img/sharks.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
@@ -138,10 +144,12 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     var bg = new Background(gameEngine);
-    var unicorn = new Unicorn(gameEngine);
+    var whale = new Whale(gameEngine);
+    var shark = new Shark(gameEngine);
 
     gameEngine.addEntity(bg);
-    gameEngine.addEntity(unicorn);
+    gameEngine.addEntity(whale);
+    gameEngine.addEntity(shark);
  
     gameEngine.init(ctx);
     gameEngine.start();
