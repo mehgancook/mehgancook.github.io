@@ -1,3 +1,5 @@
+//authors: Seth Ladd, Matt Mongeau https://robots.thoughtbot.com/pong-clone-in-javascript, Mehgan Cook
+
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
@@ -87,7 +89,7 @@ Paddle.prototype = new Entity();
 Paddle.prototype.constructor = Paddle;
 
 Paddle.prototype.draw = function () {
-    this.game.ctx.fillStyle = "white";
+    this.game.ctx.fillStyle = "rgb(234,196,35)";
     this.game.ctx.fillRect(this.x, this.y, this.width, this.height);
     Entity.prototype.draw.call(this);
 }
@@ -105,14 +107,16 @@ Paddle.prototype.draw = function () {
 function Ball(game, x, y, player, computer) { //, paddle1, paddle2) {
     this.x = x;
     this.y = y;
+    this.game = game;
     this.player = player;
     this.computer = computer;
+    this.endGame = false;
     // this.paddle1 = player.paddle;
     // this.paddle2 = computer.paddle;
     // this.paddle2 = paddle2;
     this.x_speed = 0;
-    this.y_speed = 3;
-    Entity.call(this, game, 400, 400);
+    this.y_speed = 4;
+    Entity.call(this, game, this.x, this.y);
 
 }
 
@@ -122,59 +126,90 @@ Ball.prototype.constructor = Ball;
 Ball.prototype.update = function () {
     this.x += this.x_speed;
     this.y += this.y_speed;
-    var top_x = this.x - 5;
-    var top_y = this.y - 5;
-    var bottom_x = this.x + 5;
-    var bottom_y = this.y + 5;
-        if (this.x - 5 < 0) {    //hitting the left wall
-        this.x = 5;
+    var top_x = this.x - 10;
+    var top_y = this.y - 10;
+    var bottom_x = this.x + 10;
+    var bottom_y = this.y + 10;
+    if (this.x - 10 < 0) {    //hitting the left wall
+        this.x = 10;
         this.x_speed = -this.x_speed;
-    } else if (this.x + 5 > 800) {  // hitting the right wall
-        this.x = 795;
+    } else if (this.x + 10 > 800) {  // hitting the right wall
+        this.x = 790;
         this.x_speed = -this.x_speed;
     }
 
-    if (this.y < 0 || this.y > 800) { //point scored
+    if (this.y < 0 || this.y > 800) {
+        if (this.y < 0) {
+            this.player.score++;
+            this.game.score2.innerHTML = this.player.score;
+        }
+        if (this.y > 800) {
+            this.computer.score++;
+            this.game.score1.innerHTML = this.computer.score;
+        } 
+        if (this.computer.score === 3 || this.player.score === 3) {
+            if (this.computer.score === 3) {
+                this.game.winner.innerHTML = "You lose!";
+            } else {
+                this.game.winner.innerHTML = "You win!";
+            }
+            this.removeFromWorld = true;
+            
+
+            Entity.prototype.draw.call(this);
+       // console.log(this.game.player.score);
+        }
         this.x_speed = 0;
-        this.y_speed = 3;
+        this.y_speed = 4;
         this.x = 400;
         this.y = 400;
-    }
+    }//point scored
+
+
+
+    
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
         if (ent instanceof Paddle) {
             if (top_y > 650) {
       //          console.log("in bounds!");
                if (top_y < (ent.y + ent.height) && bottom_y > ent.y && top_x < (ent.x + ent.width) && bottom_x > ent.x) {
-                  this.y_speed = -3;
-                  this.x_speed += (ent.x_speed / 2);
+                  this.y_speed = -4;
+                  this.x_speed += (ent.x_speed);
                   this.y += this.y_speed; 
                }
            } else {
               if(top_y < (ent.y + ent.height) && bottom_y > ent.y && top_x < (ent.x + ent.width) && bottom_x > ent.x) {
                  // hit the computer's paddle
-                this.y_speed = 3;
+                this.y_speed = 4;
                 this.x_speed += (ent.x_speed / 2);
                 this.y += this.y_speed;
               }
            }
         }
-
     }
-
+    console.log(this.y_speed);
     Entity.prototype.update.call(this);
 }
 
 Ball.prototype.draw = function () {
+
     this.game.ctx.beginPath();
     this.game.ctx.arc(this.x, this.y, 10, 2 * Math.PI, false);
-    this.game.ctx.fillStyle = "grey";
-    this.game.ctx.fill();
+    this.game.ctx.fillStyle = "rgb(132,181,100)";
+    this.game.ctx.fill();  
     Entity.prototype.draw.call(this);
+
 }
 
 function Player(game) {
+
+    this.score = 0;
+    this.dead = false; 
+ //   this.game.score2.innerHTML = this.score;
     this.game = game;
+    this.game.score2.innerHTML = this.score;
+
  //   this.ball = ball;
     this.paddle = new Paddle(game, 370, 750, 65, 10, this.ball);
     this.game.addEntity(this.paddle);
@@ -185,28 +220,34 @@ Player.prototype = new Entity();
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
+    if (this.game.running) {
+        if (this.dead) {
+            this.game.reset();
+            return;
+        }
     if (this.game.left === true) {
-         this.paddle.x -= 4;
-        // this.y += y;
-         this.paddle.x_speed = -4;
-        // this.paddle.y_speed = y;
+         this.paddle.x -= 5;
+         this.paddle.x_speed = -5;
          if(this.paddle.x < 0) { // all the way to the left
             this.paddle.x = 0;
             this.paddle.x_speed = 0;
          }
     }
     if (this.game.right === true) {
-        this.paddle.x += 4;
-        this.paddle.x_speed = 4;
+        this.paddle.x += 5;
+        this.paddle.x_speed = 5;
         if (this.paddle.x + this.paddle.width > 800) { // all the way to the right
             this.paddle.x = 800 - this.paddle.width;
             this.paddle.x_speed = 0;
          }
      }
+ }
+     Entity.prototype.update.call(this);
 }
 
 
 Player.prototype.draw = function() {
+    if (this.dead || !this.game.running) return;
     this.paddle.draw();
 }
 
@@ -214,6 +255,10 @@ Player.prototype.draw = function() {
 function Computer(game) {
 //    this.ball = ball;
     this.game = game;
+    this.score = 0; 
+ //   this.game.score2.innerHTML = this.score;
+    this.game.score1.innerHTML = this.score;
+
     this.paddle = new Paddle(game, 0, 50, 65, 10, this.ball);
     this.game.addEntity(this.paddle);
 }
@@ -231,44 +276,17 @@ Computer.prototype.update = function() {
              var x_pos = ent.x;
            // console.log(x_pos);
              diff1 = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
-             console.log(diff1);
+            // console.log(diff1);
              if(diff1 < 0 && diff1 < -4) { // max speed left
                 diff1 = -5;
              } else if(diff1 > 0 && diff1 > 4) { // max speed right
-                 diff = 5;
+                 diff1 = 5;
              }
          }
      }
-         // var x_pos = this.ball.x;
-    //  var diff = -((this.x + (this.width / 2)) - x_pos);
-    //  if (diff < 0 && diff < -4) {
-    //      diff = -5;
-    //  } else if (diff > 0 && diff > 4) {
-    //      diff = 5;
-    //  }
-    // this.x += diff;
-    // this.y += 0; 
-    // this.x_speed = diff;
-    // this.y_speed = 0;
-    // if (this.x < 0) {
-    //     this.x = 0;
-    //     this.x_speed = 0;
-    // } else if (this.x + this.width > 800) {
-    //     this.x = 800 - this.width;
-    //     this.x_speed = 0;
-    // }
-    // if (this.x < 0) {
-    //     this.x = 0;
-    // } else if (this.x + this.width > 800) {
-    //     this.x = 800 - this.width;
-    // }
- // // this.paddle.move(diff, 0);
-// console.log(diff);
- //console.log(this.paddle.x);
     this.paddle.x += diff1;
-        //this.paddle.y += y;
     this.paddle.x_speed = diff1;
-        //this.paddle.y_speed = y;
+  //  console.log(this.paddle.x_speed);
     if(this.paddle.x < 0) { // all the way to the left
          this.paddle.x = 0;
          this.paddle.x_speed = 0;
@@ -276,6 +294,7 @@ Computer.prototype.update = function() {
         this.paddle.x = 800 - this.paddle.width;
         this.paddle.x_speed = 0;
     }
+    Entity.prototype.update.call(this);
 }
 
 
@@ -283,11 +302,6 @@ Computer.prototype.draw = function() {
    // console.log("im not drawing?");
     this.paddle.draw();
 }
-
-
-
-
-
 
 function Whale(game) {
 
@@ -357,29 +371,39 @@ ASSET_MANAGER.queueDownload("./img/sharks.png");
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
     var canvas = document.getElementById('gameWorld');
+    var score1 = document.getElementById('score1');
+    var score2 = document.getElementById('score2');
+    var winner = document.getElementById('winner');
+
     var ctx = canvas.getContext('2d');
 
     var gameEngine = new GameEngine();
+    gameEngine.score1 = score1;
+    gameEngine.score2 = score2;
+    gameEngine.winner = winner;
+    gameEngine.running = true;
     var bg = new Background(gameEngine);
     var whale = new Whale(gameEngine);
     var player = new Player(gameEngine, ball);
     var computer = new Computer(gameEngine, ball);
-    var ball = new Ball(gameEngine, 300, 300, player, computer); //paddle1, paddle2);
+    var ball = new Ball(gameEngine, 400, 400, player, computer);
+    var ball1 = new Ball(gameEngine, 200, 200, player, computer); //paddle1, paddle2);
     var shark = new Shark(gameEngine);
+ //   var pg = new PlayGame(gameEngine, 320, 350);
     // var player = new Player(gameEngine);
     // var computer = new Computer(gameEngine);
     // var paddle1 = new Paddle(gameEngine, 380, 580, 50, 10, ball);
     // var paddle2 = new Paddle(gameEngine, 380, 180, 50, 10, ball);
-
     gameEngine.addEntity(bg);
    // gameEngine.addEntity(whale);
   //  gameEngine.addEntity(shark);
     gameEngine.addEntity(ball);
+  //  gameEngine.addEntity(ball1);
     gameEngine.addEntity(player);
     gameEngine.addEntity(computer);
  //   gameEngine.addEntity(paddle1);
     // gameEngine.addEntity(paddle2);
- 
+ //   gameEngine.addEntity(pg);
     gameEngine.init(ctx);
     gameEngine.start();
 });
