@@ -175,7 +175,7 @@ Ball.prototype.update = function () {
       //          console.log("in bounds!");
                if (top_y < (ent.y + ent.height) && bottom_y > ent.y && top_x < (ent.x + ent.width) && bottom_x > ent.x) {
                   this.y_speed = -4;
-                  this.x_speed += (ent.x_speed);
+                  this.x_speed += (ent.x_speed / 2);
                   this.y += this.y_speed; 
                }
            } else {
