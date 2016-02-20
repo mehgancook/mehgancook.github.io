@@ -303,61 +303,6 @@ Computer.prototype.draw = function() {
     this.paddle.draw();
 }
 
-function Whale(game) {
-
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 240, 99, 70, 0.15, 3, true, true);
-    this.biteAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 31, 100, 70, 0.15, 3, false, true);
-    this.backAnimation = new Animation(ASSET_MANAGER.getAsset("./img/whale.png"), 0, 137, 100, 70, 0.15, 3, true, true);
-    this.biting = false;
-     this.radius = 100;
-    // this.ground = 350;
-    Entity.call(this, game, -50, 200);
-}
-
-function Shark(game) {
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./img/sharks.png"), 0, 150, 86, 45, 0.15, 3, true, true);
-    this.radius = 100;
-    this.ground = 350;
-    Entity.call(this, game, 0, 700);
-}
-
-
-Shark.prototype = new Entity();
-Shark.prototype.constructor = Shark;
-
-
-Whale.prototype = new Entity();
-Whale.prototype.constructor = Whale;
-
-Whale.prototype.update = function () {
-    if (this.game.space) this.biting = true;
-    if (this.biting) {
-        if (this.biteAnimation.isDone()) {
-            this.biteAnimation.elapsedTime = 0;
-            this.biting = false;
-        }
-
-    }
-    Entity.prototype.update.call(this);
-}
-
-Shark.prototype.draw = function (ctx) {
-    this.x += 5;
-    this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
-
-}
-
-Whale.prototype.draw = function (ctx) {
-    if (this.biting) {
-            this.x += 2;
-            this.biteAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-    }
-    else {
-        this.x += 2;
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-    }
-    Entity.prototype.draw.call(this);
-}
 
 // the "main" code begins here
 
@@ -383,12 +328,12 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.winner = winner;
     gameEngine.running = true;
     var bg = new Background(gameEngine);
-    var whale = new Whale(gameEngine);
+  //  var whale = new Whale(gameEngine);
     var player = new Player(gameEngine, ball);
     var computer = new Computer(gameEngine, ball);
     var ball = new Ball(gameEngine, 400, 400, player, computer);
     var ball1 = new Ball(gameEngine, 200, 200, player, computer); //paddle1, paddle2);
-    var shark = new Shark(gameEngine);
+  //  var shark = new Shark(gameEngine);
  //   var pg = new PlayGame(gameEngine, 320, 350);
     // var player = new Player(gameEngine);
     // var computer = new Computer(gameEngine);
