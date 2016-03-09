@@ -3,7 +3,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Game Project Shell</title>
+    <title>PONG!!!</title>
+    <script type="text/javascript" src="http://76.28.150.193:8888/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./main.js"></script>
@@ -19,6 +20,13 @@
     </div>
 <body>
     <canvas id="gameWorld" tabindex="1" width="800" height="800" style="border: 3px solid black;  background-image: url('zelda.jpg');"></canvas>
+    <div>
+        <input id="save" type="button" value="Save">
+        <input id="load" type="button" value="Load">
+    </div>
+    <p>
+    	Reclick the screen to focus!
+    </p>
 </body>
 
 </html>

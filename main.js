@@ -1,59 +1,5 @@
 //authors: Seth Ladd, Matt Mongeau https://robots.thoughtbot.com/pong-clone-in-javascript, Mehgan Cook
 
-function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
-    this.spriteSheet = spriteSheet;
-    this.startX = startX;
-    this.startY = startY;
-    this.frameWidth = frameWidth;
-    this.frameDuration = frameDuration;
-    this.frameHeight = frameHeight;
-    this.frames = frames;
-    this.totalTime = frameDuration * frames;
-    this.elapsedTime = 0;
-    this.loop = loop;
-    this.reverse = reverse;
-}
-
-Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 3;
-    this.elapsedTime += tick;
-    if (this.loop) {
-        if (this.isDone()) {
-            this.elapsedTime = 0;
-        }
-    } else if (this.isDone()) {
-        return;
-    }
-    var index = this.reverse ? this.frames - this.currentFrame() - 1 : this.currentFrame();
-    var vindex = 0;
-    if ((index + 1) * this.frameWidth + this.startX > this.spriteSheet.width) {
-        index -= Math.floor((this.spriteSheet.width - this.startX) / this.frameWidth);
-        vindex++;
-    }
-    while ((index + 1) * this.frameWidth > this.spriteSheet.width) {
-        index -= Math.floor(this.spriteSheet.width / this.frameWidth);
-        vindex++;
-    }
-
-    var locX = x;
-    var locY = y;
-    var offset = vindex === 0 ? this.startX : 0;
-    ctx.drawImage(this.spriteSheet,
-                  index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
-                  this.frameWidth, this.frameHeight,
-                  locX, locY,
-                  this.frameWidth * scaleBy,
-                  this.frameHeight * scaleBy);
-}
-
-Animation.prototype.currentFrame = function () {
-    return Math.floor(this.elapsedTime / this.frameDuration);
-}
-
-Animation.prototype.isDone = function () {
-    return (this.elapsedTime >= this.totalTime);
-}
-
 function Background(game) {
     Entity.call(this, game, 0, 400);
     this.radius = 200;
@@ -147,18 +93,27 @@ Ball.prototype.update = function () {
             this.computer.score++;
             this.game.score1.innerHTML = this.computer.score;
         } 
-        if (this.computer.score === 3 || this.player.score === 3) {
-            if (this.computer.score === 3) {
-                this.game.winner.innerHTML = "You lose!";
-            } else {
-                this.game.winner.innerHTML = "You win!";
-            }
-            this.removeFromWorld = true;
+       //  if (this.computer.score >= 3 || this.player.score >= 3) {
+       //      if (this.computer.score >= 3) {
+       //          this.game.winner.innerHTML = "You lose!";
+       //      } else {
+       //          this.game.winner.innerHTML = "You win!";
+       //      }
+       //      this.game.running = false;
+       //      this.removeFromWorld = true;
             
 
-            Entity.prototype.draw.call(this);
-       // console.log(this.game.player.score);
-        }
+       //      Entity.prototype.draw.call(this);
+       // // console.log(this.game.player.score);
+       //   }// else if (this.computer.score < 3 || this.player.score < 3){
+        //   console.log("do i make it here");
+        //   this.game.winner.innerHTML = "";
+        //   this.game.running = true;
+        //   this.dead = false;
+        //   this.removeFromWorld = false;
+        //   this.game.score2.innerHTML = this.player.score;
+        //   this.game.score1.innerHTML = this.computer.score;
+        // }
         this.x_speed = 0;
         this.y_speed = 4;
         this.x = 400;
@@ -188,7 +143,7 @@ Ball.prototype.update = function () {
            }
         }
     }
-    console.log(this.y_speed);
+   // console.log(this.y_speed);
     Entity.prototype.update.call(this);
 }
 
@@ -220,6 +175,7 @@ Player.prototype = new Entity();
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
+  this.game.score2.innerHTML = this.score;
     if (this.game.running) {
         if (this.dead) {
             this.game.reset();
@@ -247,6 +203,7 @@ Player.prototype.update = function() {
 
 
 Player.prototype.draw = function() {
+ // this.game.score2.innerHTML = this.score;
     if (this.dead || !this.game.running) return;
     this.paddle.draw();
 }
@@ -267,6 +224,7 @@ Computer.prototype = new Entity();
 Computer.prototype.constructor = Computer;
 
 Computer.prototype.update = function() {
+   this.game.score1.innerHTML = this.score;
     var diff1 = 0;
   //  console.log(diff1);
      for (var i = 0; i < this.game.entities.length; i++) {
@@ -304,6 +262,9 @@ Computer.prototype.draw = function() {
 }
 
 
+
+
+
 // the "main" code begins here
 
 var ASSET_MANAGER = new AssetManager();
@@ -328,27 +289,62 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.winner = winner;
     gameEngine.running = true;
     var bg = new Background(gameEngine);
-  //  var whale = new Whale(gameEngine);
+
     var player = new Player(gameEngine, ball);
     var computer = new Computer(gameEngine, ball);
     var ball = new Ball(gameEngine, 400, 400, player, computer);
     var ball1 = new Ball(gameEngine, 200, 200, player, computer); //paddle1, paddle2);
-  //  var shark = new Shark(gameEngine);
- //   var pg = new PlayGame(gameEngine, 320, 350);
-    // var player = new Player(gameEngine);
-    // var computer = new Computer(gameEngine);
-    // var paddle1 = new Paddle(gameEngine, 380, 580, 50, 10, ball);
-    // var paddle2 = new Paddle(gameEngine, 380, 180, 50, 10, ball);
     gameEngine.addEntity(bg);
-   // gameEngine.addEntity(whale);
-  //  gameEngine.addEntity(shark);
+
     gameEngine.addEntity(ball);
-  //  gameEngine.addEntity(ball1);
+
     gameEngine.addEntity(player);
     gameEngine.addEntity(computer);
- //   gameEngine.addEntity(paddle1);
-    // gameEngine.addEntity(paddle2);
- //   gameEngine.addEntity(pg);
+
     gameEngine.init(ctx);
     gameEngine.start();
+
+     var socket = io.connect("http://76.28.150.193:8888");
+         socket.on("connect", function () {
+        console.log("Socket connected.")
+    });
+    socket.on("disconnect", function () {
+        console.log("Socket disconnected.")
+    });
+    socket.on("reconnect", function () {
+        console.log("Socket reconnected.")
+    });
+
+
+    socket.on("load", function (data) {
+    var studentName = data.studentname;
+    var stateName = data.statename;
+    // var player_score = data.player_score;
+    // var computer_score = data.computer_score;
+    player.score = data.player_score;
+    computer.score = data.computer_score;
+    player.paddle.x = data.player_paddle_position;
+    computer.paddle.x = data.computer_paddle_position;
+    ball.x = data.ball_position;
+    ball.y = data.ball_y_position;
+    ball.x_speed = data.ball_x_speed;
+    ball.y_speed = data.ball_y_speed;
+    ball.update();
+    player.update();
+    computer.update();
+
 });
+ var button1 = document.getElementById("save");
+ button1.addEventListener("click", function() {
+    socket.emit("save", { studentname: "Mehgan Cook", statename: "CurrentPingPongGame", player_score: player.score, computer_score: computer.score,
+                          player_paddle_position: player.paddle.x , computer_paddle_position: computer.paddle.x, ball_position: ball.x, ball_x_speed: ball.x_speed,
+                          ball_y_speed: ball.y_speed, ball_y_position: ball.y});
+    console.log("saved!");
+    }, false);
+ // document.getElementById('canvas').focus();
+var button2 = document.getElementById("load");
+    button2.addEventListener("click", function() {
+    socket.emit("load", { studentname: "Mehgan Cook", statename: "CurrentPingPongGame" });
+    console.log("loads!");
+    }, false);
+ });
